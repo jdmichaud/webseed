@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com...</groupId>
+  <artifactId>webseed</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <!--<packaging>pom</packaging> -->
+  <description>Frontend of Webseed</description>
+
+  <properties>
+    <frontend-maven-plugin.version>0.0.28</frontend-maven-plugin.version>
+    <node.version>v5.6.0</node.version>
+    <npm.version>3.3.6</npm.version>
+    <sonar.language>js</sonar.language>
+    <sonar.sources>src</sonar.sources>
+    <sonar.sourceEncoding>UTF-8</sonar.sourceEncoding>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>com.github.eirslett</groupId>
+        <artifactId>frontend-maven-plugin</artifactId>
+        <version>${frontend-maven-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>default-install-node-and-npm</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>install-node-and-npm</goal>
+            </goals>
+            <configuration>
+              <nodeVersion>${node.version}</nodeVersion>
+              <npmVersion>${npm.version}</npmVersion>
+              <nodeDownloadRoot>http://nodejs.org/dist/</nodeDownloadRoot>
+            </configuration>
+          </execution>
+          <execution>
+            <id>grunt-compile</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>grunt</goal>
+            </goals>
+            <configuration>
+              <arguments>compile</arguments>
+            </configuration>
+          </execution>
+          <execution>
+            <id>grunt-test-only</id>
+            <phase>test</phase>
+            <goals>
+              <goal>grunt</goal>
+            </goals>
+            <configuration>
+              <arguments>test-only</arguments>
+            </configuration>
+          </execution>
+          <execution>
+            <id>grunt-clean</id>
+            <phase>clean</phase>
+            <goals>
+              <goal>grunt</goal>
+            </goals>
+            <configuration>
+              <arguments>clean</arguments>
+            </configuration>
+          </execution>
+          <execution>
+            <id>grunt-doc</id>
+            <phase>site</phase>
+            <goals>
+              <goal>grunt</goal>
+            </goals>
+            <configuration>
+              <arguments>doc</arguments>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <!-- For each compile, maven-frontend plugin will execute `npm install`, which
+         in turn will systematically execute the npm post install scripts of all
+         the installed packages which can take a while, in particular if the proxy
+         timeouts.
+         This profile checks if the folder node_modules is missing and if so, will
+         execute `npm install`.
+    -->
+    <profile>
+      <id>npm-install</id>
+      <activation>
+        <file>
+          <missing>node_modules</missing>
+        </file>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.github.eirslett</groupId>
+            <artifactId>frontend-maven-plugin</artifactId>
+            <version>${frontend-maven-plugin.version}</version>
+            <executions>
+              <execution>
+                <id>default-npm</id>
+                <phase>generate-resources</phase>
+                <goals>
+                  <goal>npm</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>default-bower</id>
+                <phase>generate-resources</phase>
+                <goals>
+                  <goal>bower</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <!-- In case the folder node_modules already exists, just execute
+         `bower install`
+    -->
+    <profile>
+      <id>no-npm-install</id>
+      <activation>
+        <file>
+          <exists>node_modules</exists>
+        </file>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.github.eirslett</groupId>
+            <artifactId>frontend-maven-plugin</artifactId>
+            <version>${frontend-maven-plugin.version}</version>
+            <executions>
+              <execution>
+                <id>default-bower</id>
+                <phase>generate-resources</phase>
+                <goals>
+                  <goal>bower</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+  </profiles>
+</project>

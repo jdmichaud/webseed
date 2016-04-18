@@ -1,0 +1,22 @@
+{
+  "name": "webseed",
+  "version": "0.0.1",
+  "dependencies": {
+    "angular": "1.5.0",
+    "angular-touch": "1.5.0",
+    "jquery": "2.2.1",
+    "bootstrap": "3.3.6",
+    "angular-bootstrap": "1.1.2",
+    "angular-translate": "2.9.0.1",
+    "angular-translate-loader-static-files": "2.11.0",
+    "angular-ui-router": "0.2.18",
+    "oclazyload": "1.0.9",
+    "ryanmullins-angular-hammer": "2.1.10",
+    "stacktrace-js": "1.1.0"
+  },
+  "devDependencies": {
+    "angular-mocks": "1.5.0"
+  },
+  "appPath": "app",
+  "moduleName": "workspaceApp"
+}
