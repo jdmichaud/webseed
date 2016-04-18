@@ -1,3 +1,4 @@
+/* eslint max-len: 0 */
 
 module.exports = function (config) {
   'use strict';
