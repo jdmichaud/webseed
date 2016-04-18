@@ -3,6 +3,9 @@
 module.exports = function (grunt) {
   // Load grunt tasks automatically
   require('load-grunt-tasks')(grunt);
+  // These got to be loaded manually
+  grunt.registerTask('doc', ['jsdoc']);
+  grunt.loadNpmTasks('gruntify-eslint');
 
   // Configurable paths
   var config = {
@@ -13,7 +16,7 @@ module.exports = function (grunt) {
     package: '../backend/webapp',
     node_modules: '../../node_modules',
     connectPort: 9000,
-    livereloadPort: 35729
+    livereloadPort: 35729,
     websocketMockPort: 8888,
   };
 
@@ -24,25 +27,27 @@ module.exports = function (grunt) {
 
     // Clean the output folder. The internal one used for testing (dist) and
     // the package pushed to the backend (package)
-    'clean': {
-      'files': [
-        '<% config.dist %>',
-        '<% config.package %>',
-      ],
+    clean: {
+      files: {
+        src: [
+          '<%= config.dist %>',
+          '<%= config.package %>',
+        ],
+      },
     },
     // Will execute the linter tools on the file mentioned.
-    'eslint': {
+    eslint: {
       src: [
         'gruntfile.js',
         '<%= config.app %>',
         '<%= config.test %>/**/*.js',
       ],
       options: {
-        config: '.eslintrc'
+        config: '.eslintrc',
       },
     },
     // Parse the html files provided in src and inject path to bower components
-    'wiredep': {
+    wiredep: {
       task: {
         src: ['<%= config.app %>/index.html'],
       },
@@ -67,7 +72,7 @@ module.exports = function (grunt) {
     },
     // Minify HTML to reduce their sice. Not applied for testing.
     // Generate the html output in config.dist
-    'htmlmin': {
+    htmlmin: {
       package: {
         options: {
           collapseWhitespace: true,
@@ -87,7 +92,7 @@ module.exports = function (grunt) {
     // Compress images to quicken load times.
     // Compression takes times so we apply a smaller one for dist.
     // Generate compressed images to config.dist.
-    'imagemin': {
+    imagemin: {
       dist: {
         options: {
           optimizationLevel: 1,
@@ -104,10 +109,10 @@ module.exports = function (grunt) {
         src: '{,*/}*.{png,jpg,jpeg,gif}',
         dest: '<%= config.dist %>/resources/img',
       }],
-     },
+    },
     // Minify and concatenate CSS files.
     // Generate minified images to config.dist.
-    'cssmin': {
+    cssmin: {
       dist: {
         options: {
           sourceMap: true,
@@ -129,7 +134,7 @@ module.exports = function (grunt) {
     // ng-annotate tries to make the code safe for minification automatically
     // by using the Angular long form for dependency injection.
     // Produce its output to <%= config.tmp %>/ngAnnotate/js
-    'ngAnnotate': {
+    ngAnnotate: {
       files: [{
         expand: true,
         cwd: '<%= config.app %>',
@@ -143,7 +148,7 @@ module.exports = function (grunt) {
     // For the dist target, no uglifying is done and sourceMap are generated.
     // Input files are taken from ngAnnotate tmp directory.
     // Output file is generate in config.dist
-    'requirejs': { // includes uglifyjs
+    requirejs: { // includes uglifyjs
       options: {
         baseUrl: '<%= config.tmp %>/ngAnnotate/js',
         include: 'main', // Main script to load
@@ -166,15 +171,15 @@ module.exports = function (grunt) {
     bower_concat: {
       all: {
         dest: {
-          'js': '<%= config.dist %>/js/lib/',
-          'css': '<%= config.dist %>/resources/css/lib/'
+          js: '<%= config.dist %>/js/lib/',
+          css: '<%= config.dist %>/resources/css/lib/',
         },
       },
     },
     // Copy the remaining files in dist
     // Special action for package which copied the whole dist folder to the
     // backend.
-    'copy': {
+    copy: {
       html: {
         files: [{
           expand: true,
@@ -199,51 +204,51 @@ module.exports = function (grunt) {
 
     // Create a webserver to statically serve the page for testing purposes.
     // Use watch/livereload to automatically compile and reload on changes.
-    'connect': {
+    connect: {
       options: {
-        port: <%= config.connectPort %>,
+        port: '<%= config.connectPort %>',
         open: true,
-        livereload: <%= config.livereloadPort %>,
+        livereload: '<%= config.livereloadPort %>',
         // Change this to 'localhost' to prevent access to the server from outside
-        hostname: '0.0.0.0'
+        hostname: '0.0.0.0',
       },
       livereload: {
         options: {
-          middleware: function(connect) {
+          middleware: function (connect) {
             return [
               connect.static('dist'),
             ];
-          }
-        }
+          },
+        },
       },
     },
     // Watch changes in files and performs tasks accordingly.
-    'watch': {
+    watch: {
       bower: {
         files: ['bower.json'],
-        tasks: ['bowerInstall']
+        tasks: ['bowerInstall'],
       },
       js: {
         files: ['<%= config.app %>/js/**/*.js'],
-          tasks: ['eslint'],
-          options: {
-            livereload: true
-          }
+        tasks: ['eslint'],
+        options: {
+          livereload: true,
+        },
       },
       jstest: {
         files: ['test/**/*.js'],
-        tasks: ['test:watch']
+        tasks: ['test:watch'],
       },
       gruntfile: {
-        files: ['Gruntfile.js']
+        files: ['Gruntfile.js'],
       },
       styles: {
         files: ['<%= config.app %>/resources/css/**/*.css'],
-          tasks: ['cssmin']
+        tasks: ['cssmin'],
       },
       livereload: {
         options: {
-          livereload: '<%= connect.options.livereload %>'
+          livereload: '<%= connect.options.livereload %>',
         },
         files: [
           '<%= config.app %>/templates/**/*.html',
@@ -257,10 +262,10 @@ module.exports = function (grunt) {
     // Warning: No websocket shall be used when unit testing !
     websocket: {
       options: {
-        port: <%= config.websocketMockPort %>,
+        port: '<%= config.websocketMockPort %>',
         handler: 'test/mock/websocket-mock.js',
       },
-      target: {}
+      target: {},
     },
 
     // Test settings
@@ -280,7 +285,7 @@ module.exports = function (grunt) {
         },
       },
     },
-  )};
+  });
 
   // Create the dist folder, with a minimum of minification and with maps
   // generated for easier debugging.
@@ -351,15 +356,15 @@ module.exports = function (grunt) {
   });
 
   // Maven related tasks
-  grunt.registerTask('clean', function (target) {
-    'clean',
-  });
-
   grunt.registerTask('compile', function (target) {
-    'package',
+    grunt.task.run([
+      'package',
+    ]);
   });
 
   grunt.registerTask('test-only', function (target) {
-    'test',
+    grunt.task.run([
+      'test',
+    ]);
   });
 };

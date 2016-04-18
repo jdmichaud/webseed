@@ -7,7 +7,7 @@
     "jquery": "2.2.1",
     "bootstrap": "3.3.6",
     "angular-bootstrap": "1.1.2",
-    "angular-translate": "2.9.0.1",
+    "angular-translate": "2.11.0",
     "angular-translate-loader-static-files": "2.11.0",
     "angular-ui-router": "0.2.18",
     "oclazyload": "1.0.9",
