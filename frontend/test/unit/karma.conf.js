@@ -35,6 +35,7 @@ module.exports = function (config) {
       'bower_components/error-stack-parser/error-stack-parser.js',
       'bower_components/stack-generator/stack-generator.js',
       'bower_components/stacktrace-gps/dist/stacktrace-gps.js',
+      'bower_components/stacktrace-js/stacktrace.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
 			// Add require here, after the bower componenes, which will be loaded
