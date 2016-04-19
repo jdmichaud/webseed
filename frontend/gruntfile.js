@@ -209,12 +209,14 @@ module.exports = function (grunt) {
         options: {
           sourceMap: true,
           sourceMapName: '<%= config.dist %>/js/lib/vendor.js.map',
+          screwIE8: true,
         },
         files: '<%= uglify.files %>',
       },
       package: {
         options: {
           sourceMap: false,
+          screwIE8: true,
         },
         files: '<%= uglify.files %>',
       },
@@ -266,7 +268,11 @@ module.exports = function (grunt) {
       livereload: {
         options: {
           middleware: function (connect) {
+            var debugMockRequests = require('./test/mock/rest-mock');
+            console.log(debugMockRequests());
+            var mockRequests = require('mock-rest-request');
             return [
+              mockRequests(debugMockRequests()),
               connect.static('dist'),
             ];
           },

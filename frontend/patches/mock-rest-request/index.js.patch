@@ -1,0 +1,14 @@
+--- node_modules/mock-rest-request/index.js.bkp	2016-01-21 15:31:54.389560432 +0100
++++ node_modules/mock-rest-request/index.js	2016-01-21 15:22:33.861565811 +0100
+@@ -16,6 +16,11 @@
+ };
+ 
+ module.exports = function mockRequests(options) {
++  console.log(options);
++  if (options.hasOwnProperty('map')) {
++    mocks['GET'] = options.map['GET'] || {};
++    mocks['POST'] = options.map['POST'] || {};
++  }
+   return function (req, res, next) {
+     if (req.method === 'POST' && req.url.indexOf('/mock') === 0) {
+       var path = req.url.substring(5);
