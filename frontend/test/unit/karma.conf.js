@@ -16,8 +16,6 @@ module.exports = function (config) {
 
     // list of files / patterns to load in the browser
     files: [
-      // Babel polyfill is used to enable ES6 features on PhantomJS
-      'node_modules/babel-polyfill/dist/polyfill.js',
       // This part is filled but by wiredep, a task configured in the gruntfile.
       // bower:js
       'bower_components/jquery/dist/jquery.js',
@@ -38,18 +36,22 @@ module.exports = function (config) {
       'bower_components/stacktrace-js/stacktrace.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
-			// Add require here, after the bower componenes, which will be loaded
+
+      // Add require here, after the bower componenes, which will be loaded
 			// AMD style.
       'node_modules/requirejs/require.js',
       'node_modules/karma-requirejs/lib/adapter.js',
-      { pattern: 'test/unit/**/*.spec.js', included: false },
-      { pattern: 'app/js/**/*.js', included: false },
+
+      // Babel polyfill is used to enable ES6 features on PhantomJS
+      'node_modules/babel-polyfill/dist/polyfill.js',
+
+      'app/js/**/*.js',
+      'test/unit/**/*.spec.js',
       'test/unit/test-main.js',
     ],
 
     // list of files to exclude
     exclude: [
-      'app/js/main.js',
     ],
 
     // preprocess matching files before serving them to the browser
