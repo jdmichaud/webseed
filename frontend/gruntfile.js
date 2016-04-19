@@ -177,12 +177,22 @@ module.exports = function (grunt) {
           js: '<%= config.dist %>/js/lib/vendor.js',
           css: '<%= config.dist %>/resources/css/lib/vendor.css',
         },
+        // Exclude stacktrace.js, which behaves badly and include files that are
+        // not ready to be loaded in the browser (source-map.js which is using
+        // the 'exports' global variable)
+        exclude: [
+          'stacktrace-js',
+          'source-map',
+        ],
         // Bootstrap does not respect the bower standards, thus the need to
         // sepcify to bower_concat where the files are located.
         mainFiles: {
           bootstrap: [
             'dist/css/bootstrap.min.css',
             'dist/js/bootstrap.min.js',
+          ],
+          'stacktrace-js': [
+            'dist/stacktrace-with-polyfills.min.js',
           ],
         },
       },
@@ -216,6 +226,11 @@ module.exports = function (grunt) {
         files: [{
           expand: true,
           cwd: '<%= config.app %>',
+          src: ['index.html', 'favicon.ico'],
+          dest: '<%= config.dist %>',
+        }, {
+          expand: true,
+          cwd: '<%= config.app %>',
           src: ['templates/**/*.html'],
           dest: '<%= config.dist %>/templates',
         }],
@@ -241,6 +256,8 @@ module.exports = function (grunt) {
         port: '<%= config.connectPort %>',
         // Do not automatically open a browser
         open: false,
+        // Log HTTP requests
+        debug: true,
         livereload: '<%= config.livereloadPort %>',
         // Change this to 'localhost' to prevent access to the server from outside
         hostname: '0.0.0.0',
@@ -284,6 +301,7 @@ module.exports = function (grunt) {
           livereload: '<%= connect.options.livereload %>',
         },
         files: [
+          '<%= config.app %>/index.html',
           '<%= config.app %>/templates/**/*.html',
           '<%= config.app %>/templates/**/*.css',
           '<%= config.app %>/templates/**/*',
