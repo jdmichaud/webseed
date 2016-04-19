@@ -112,27 +112,6 @@ module.exports = function (grunt) {
         dest: '<%= config.dist %>/resources/img',
       }],
     },
-    // Minify and concatenate CSS files.
-    // Generate minified images to config.dist.
-    cssmin: {
-      dist: {
-        options: {
-          sourceMap: true,
-        },
-      },
-      package: {
-        options: {
-          sourceMap: false,
-        },
-      },
-      files: [{
-        expand: true,
-        cwd: '<%= config.app %>/resources/css',
-        src: ['*.css', '!*.min.css'],
-        dest: '<%= config.app %>/resources/css',
-        ext: '.min.css',
-      }],
-    },
     // ng-annotate tries to make the code safe for minification automatically
     // by using the Angular long form for dependency injection.
     // Produce its output to <%= config.tmp %>/ngAnnotate/js
@@ -221,6 +200,35 @@ module.exports = function (grunt) {
         files: '<%= uglify.files %>',
       },
     },
+    // Minify and concatenate CSS files.
+    // Generate minified images to config.dist.
+    cssmin: {
+      files: [{ // project css files
+        expand: true,
+        cwd: '<%= config.app %>/resources/css',
+        src: ['*.css', '!*.min.css'],
+        dest: '<%= config.app %>/resources/css',
+        ext: '.min.css',
+      }, { // vendor css files
+        expand: true,
+        cwd: '<%= config.dist %>/resources/css/lib',
+        src: ['vendor.css'],
+        dest: '<%= config.dist %>/resources/css/lib',
+        ext: '.min.css',
+      }],
+      dist: {
+        options: {
+          sourceMap: true,
+        },
+        files: '<%= cssmin.files %>',
+      },
+      package: {
+        options: {
+          sourceMap: false,
+        },
+        files: '<%= cssmin.files %>',
+      },
+    },
     // Copy the remaining files in dist
     // Special action for package which copied the whole dist folder to the
     // backend.
@@ -236,6 +244,12 @@ module.exports = function (grunt) {
           cwd: '<%= config.app %>',
           src: ['templates/**/*.html'],
           dest: '<%= config.dist %>/templates',
+        }],
+      },
+      fakeuglify: {
+        files: [{
+          src: '<%= config.dist %>/js/lib/vendor.js',
+          dest: '<%= config.dist %>/js/lib/vendor.min.js',
         }],
       },
       package: {
@@ -287,7 +301,7 @@ module.exports = function (grunt) {
       },
       js: {
         files: ['<%= config.app %>/js/**/*.js'],
-        tasks: ['eslint'],
+        tasks: ['dist'],
         options: {
           livereload: true,
         },
@@ -297,11 +311,11 @@ module.exports = function (grunt) {
         tasks: ['test:watch'],
       },
       gruntfile: {
-        files: ['Gruntfile.js'],
+        files: ['gruntfile.js'],
       },
       styles: {
         files: ['<%= config.app %>/resources/css/**/*.css'],
-        tasks: ['cssmin'],
+        tasks: ['cssmin:dist'],
       },
       livereload: {
         options: {
@@ -353,12 +367,12 @@ module.exports = function (grunt) {
       'eslint',
       'wiredep',
       'imagemin:dist',
-      'cssmin:dist',
       'copy:html', // No minification of HTML for testing
       'ngAnnotate',
       'requirejs:dist',
       'bower_concat',
-      'uglify:dist',
+      'cssmin:dist',
+      'copy:fakeuglify', // To speed up the process. Uglify. is. slow.
     ]);
   });
 
@@ -383,12 +397,12 @@ module.exports = function (grunt) {
       'eslint',
       'wiredep',
       'imagemin:package',
-      'cssmin:package',
       'htmlmin',
       'ngAnnotate',
       'requirejs:package',
       'bower_concat',
       'uglify:package',
+      'cssmin:package',
       'copy:package', // Copy package to the backend
     ]);
   });
