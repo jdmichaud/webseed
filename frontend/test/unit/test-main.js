@@ -1,3 +1,7 @@
+/*
+ * This file is necessary to make karma work with requirejs
+ */
+
 'use strict';
 
 var allTestFiles = [];

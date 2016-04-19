@@ -57,7 +57,8 @@ module.exports = function (grunt) {
       test: {
         devDependencies: true,
         src: '<%= karma.unit.configFile %>',
-        ignorePath: /\.\.\//,
+        exclude: ['source-map'],
+        ignorePath: /\.\.\/\.\.\//,
         fileTypes: {
           js: {
             block: /(([\s\t]*)\/{2}\s*?bower:\s*?(\S*))(\n|\r|.)*?(\/{2}\s*endbower)/gi,
