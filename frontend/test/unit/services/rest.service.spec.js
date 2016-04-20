@@ -23,7 +23,7 @@ require([], function () {
     });
 
     it('shall implements the X API', function (done) {
-      // Call the login API
+      // Call the X API
       restService.x('robert@redford.com', 'pencil42').then(function (data) {
         // You can write some expectation on the service state here.
         done();
@@ -42,6 +42,16 @@ require([], function () {
           isAdmin: false,
         },
       });
+      $httpBackend.flush();
+    });
+
+    it('shall implements the log API', function () {
+      restService.log({ message: 'this is a log message', level: 2 });
+      // Expect to be called with the arbitrary log structure
+      $httpBackend.expectPUT('/log', {
+        message: 'this is a log message',
+        level: 2,
+      }).respond(200, {});
       $httpBackend.flush();
     });
   });
