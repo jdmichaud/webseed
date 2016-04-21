@@ -31,6 +31,9 @@ module.exports = function (grunt) {
     // the package pushed to the backend (package)
     clean: {
       files: {
+        options: {
+          force: true, // to delete package in backend
+        },
         src: [
           '<%= config.dist %>',
           '<%= config.package %>',
