@@ -7,8 +7,9 @@ define('services/rest.service', function () {
   'use strict';
 
   /** Define the URLs the restService is going to use */
-  var webseedURLs = {
+  var urls = {
     x: '/some/X/url',
+    log: '/log',
   };
 
   return function ($http) {
@@ -23,7 +24,7 @@ define('services/rest.service', function () {
      */
     restService.x = function x(username, password) {
       return new Promise(function (resolve, reject) {
-        $http.post(webseedURLs.x, {
+        $http.post(urls.x, {
           username: username,
           password: password,
         }).then(function (data) {
@@ -41,7 +42,10 @@ define('services/rest.service', function () {
      *                    trace information
      */
     restService.log = function log(logStruct) {
-
+      $http.put(urls.log, logStruct)
+      .then(function () {}, function () {
+        console.error('Could not log message. Server error.');
+      });
     };
 
     return restService;

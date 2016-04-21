@@ -1,7 +1,12 @@
-require(['app.modules', 'services/rest.service'], function (application, restService) {
+/* eslint indent: [0, 0] */
+
+require(['app.modules', 'services/rest.service', 'services/log.service'],
+        function (application, restServiceFactory, logServiceFactory) {
   'use strict';
 
-  application.factory('restService', restService);
+  application.service('restService', restServiceFactory);
+  application.service('logService', logServiceFactory);
+
   // Bootstrap the angular application
   angular.bootstrap(document, ['WebseedApp']);
 });

@@ -1,3 +1,5 @@
+/* eslint max-len: 0 */
+
 'use strict';
 
 module.exports = function (grunt) {
@@ -161,7 +163,6 @@ module.exports = function (grunt) {
         // not ready to be loaded in the browser (source-map.js which is using
         // the 'exports' global variable)
         exclude: [
-          'stacktrace-js',
           'source-map',
         ],
         // Bootstrap does not respect the bower standards, thus the need to
@@ -172,7 +173,9 @@ module.exports = function (grunt) {
             'dist/js/bootstrap.min.js',
           ],
           'stacktrace-js': [
-            'dist/stacktrace-with-polyfills.min.js',
+//            'stacktrace.js',
+            'dist/stacktrace-with-promises-and-json-polyfills.min.js',
+            'dist/stacktrace-with-promises-and-json-polyfills.min.js.map',
           ],
         },
       },

@@ -10,9 +10,9 @@ module.exports = function (config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['jasmine'], // 'requirejs' do not include requirejs here but
-                             // below, in the files property, to make sure to
-                             // load it at the appropriate time.
+    frameworks: ['jasmine'], // do not include requirejs here but below, in the
+                             // files property, to make sure to load it at the
+                             // appropriate time (after the bower components).
 
     // list of files / patterns to load in the browser
     files: [
@@ -33,7 +33,7 @@ module.exports = function (config) {
       'bower_components/error-stack-parser/error-stack-parser.js',
       'bower_components/stack-generator/stack-generator.js',
       'bower_components/stacktrace-gps/dist/stacktrace-gps.js',
-      'bower_components/stacktrace-js/stacktrace.js',
+      'bower_components/stacktrace-js/dist/stacktrace-with-promises-and-json-polyfills.min.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
 

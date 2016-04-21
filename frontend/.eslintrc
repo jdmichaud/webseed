@@ -40,6 +40,7 @@
       'angular': 1,
       'inject': 1,
       '_': 1,
+      'StackTrace': 1,
     },
     "env": {
       'amd': true,

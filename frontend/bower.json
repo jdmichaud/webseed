@@ -26,6 +26,11 @@
         "dist/css/bootstrap.css",
         "less/bootstrap.less"
       ]
+    },
+    "stacktrace-js": {
+      "main": [
+        "dist/stacktrace-with-promises-and-json-polyfills.min.js"
+      ]
     }
   }
 }

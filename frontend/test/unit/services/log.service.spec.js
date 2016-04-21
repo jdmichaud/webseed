@@ -5,13 +5,13 @@ require([], function () {
     var logService;
     var whatTimeIsIt = 'serenity now!';
     var stackFrame = {
-      file: 'main.js',
-      line: 44,
-      column: 13,
+      fileName: 'main.js',
+      lineNumber: 44,
+      columnNumber: 13,
     };
     var restServiceMock = {
-      log: jasmine.createSpy('log');
-    }
+      log: jasmine.createSpy('log'),
+    };
 
     // Initialize the app
     beforeEach(module('WebseedApp'));
@@ -33,21 +33,26 @@ require([], function () {
         return whatTimeIsIt;
       });
       spyOn(StackTrace, 'get').and.callFake(function () {
-        return [
-          {}, {}, stackFrame,
-        ];
+        return {
+          then: function (callback) {
+            callback([
+              {}, {}, stackFrame,
+            ]);
+          },
+        };
       });
     });
 
-    it('shall call the rest api with the log structure', function (done) {
-      message = 'this is a message';
-      level = 1;
-      timestamp = 'some timestamp';
-      file = 'app.js';
-      line = 12;
-      column = 45;
+    it('shall call the rest api with the log structure', function () {
+      var message = 'this is a message';
+      var level = 1;
+      var timestamp = 'some timestamp';
+      var file = 'app.js';
+      var line = 12;
+      var column = 45;
+      restServiceMock.log.calls.reset();
       logService.log(message, level, timestamp, file, line, column);
-      expect(restService.log).toHaveBeenCalledWith({
+      expect(restServiceMock.log).toHaveBeenCalledWith({
         message: message,
         level: level,
         timestamp: timestamp,
@@ -58,55 +63,63 @@ require([], function () {
     });
 
     it('shall call log with level 1 on the restService when called on error', function () {
-      message = 'this is a message';
+      var message = 'this is a message';
+      var level = 1;
+      restServiceMock.log.calls.reset();
       logService.error(message);
-      expect(restService.log).toHaveBeenCalledWith({
+      expect(restServiceMock.log).toHaveBeenCalledWith({
         message: message,
-        level: 1,
+        level: level,
         timestamp: whatTimeIsIt,
-        file: stackFrame.file,
-        line: stackFrame.line,
-        column: stackrame.column,
+        file: stackFrame.fileName,
+        line: stackFrame.lineNumber,
+        column: stackFrame.columnNumber,
       });
     });
 
     it('shall call log with level 2 on the restService when called on warning', function () {
-      message = 'this is a message';
+      var message = 'this is a message';
+      var level = 2;
+      restServiceMock.log.calls.reset();
       logService.warning(message);
-      expect(restService.log).toHaveBeenCalledWith({
+      expect(restServiceMock.log).toHaveBeenCalledWith({
         message: message,
-        level: 2,
+        level: level,
         timestamp: whatTimeIsIt,
-        file: stackFrame.file,
-        line: stackFrame.line,
-        column: stackrame.column,
+        file: stackFrame.fileName,
+        line: stackFrame.lineNumber,
+        column: stackFrame.columnNumber,
       });
     });
 
     it('shall call log with level 3 on the restService when called on warning', function () {
-      message = 'this is a message';
+      var message = 'this is a message';
+      var level = 3;
+      restServiceMock.log.calls.reset();
       logService.info(message);
-      expect(restService.log).toHaveBeenCalledWith({
+      expect(restServiceMock.log).toHaveBeenCalledWith({
         message: message,
-        level: 3,
+        level: level,
         timestamp: whatTimeIsIt,
-        file: stackFrame.file,
-        line: stackFrame.line,
-        column: stackrame.column,
+        file: stackFrame.fileName,
+        line: stackFrame.lineNumber,
+        column: stackFrame.columnNumber,
       });
     });
 
     it('shall call log with level 2 on the restService when called on warning', function () {
-      message = 'this is a message';
-      logService.trace(message);
-      expect(restService.log).toHaveBeenCalledWith({
+      var message = 'this is a message';
+      var level = 4;
+      restServiceMock.log.calls.reset();
+      logService.debug(message);
+      expect(restServiceMock.log).toHaveBeenCalledWith({
         message: message,
-        level: 4,
+        level: level,
         timestamp: whatTimeIsIt,
-        file: stackFrame.file,
-        line: stackFrame.line,
-        column: stackrame.column,
+        file: stackFrame.fileName,
+        line: stackFrame.lineNumber,
+        column: stackFrame.columnNumber,
       });
     });
-  })
+  });
 });
