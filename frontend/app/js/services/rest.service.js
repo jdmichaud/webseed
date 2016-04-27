@@ -6,7 +6,10 @@ define('services/rest.service', function () {
    */
   'use strict';
 
-  /** Define the URLs the restService is going to use */
+  /**
+   * Define the URLs the restService is going to use
+   * @access private
+   */
   var urls = {
     x: '/some/X/url',
     log: '/log',

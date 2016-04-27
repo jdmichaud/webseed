@@ -82,6 +82,8 @@ define('services/log.service', function () {
 
     /** @access private */
     logService.log = function (message, level, timestamp, file, line, column) {
+      // TODO: Log also on the console for now. See if we want to keep that.
+      console.log(message, file, line);
       restService.log({
         message: message,
         level: level,
