@@ -2,6 +2,6 @@
 
 A seed project for web development
 
-# TODO:
+### TODO
 
 Add app.css with minification
