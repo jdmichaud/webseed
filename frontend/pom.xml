@@ -49,6 +49,16 @@
             </configuration>
           </execution>
           <execution>
+            <id>grunt-package</id>
+            <phase>package</phase>
+            <goals>
+              <goal>grunt</goal>
+            </goals>
+            <configuration>
+              <arguments>package</arguments>
+            </configuration>
+          </execution>
+          <execution>
             <id>grunt-test-only</id>
             <phase>test</phase>
             <goals>

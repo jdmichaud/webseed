@@ -91,8 +91,17 @@ module.exports = function (grunt) {
         files: [{
           expand: true,
           cwd: '<%= config.app %>',
-          src: ['index.html', '<%= config.app %>/templates/**/*.html'],
+          src: ['index.html'],
           dest: '<%= config.dist %>',
+        }, {
+          expand: true,
+          flatten: true,
+          cwd: '<%= config.app %>',
+          src: [
+            'templates/**/*.html',
+            'js/directives/**/*.html',
+          ],
+          dest: '<%= config.dist %>/templates',
         }],
       },
     },
@@ -169,14 +178,13 @@ module.exports = function (grunt) {
           'source-map',
         ],
         // Bootstrap does not respect the bower standards, thus the need to
-        // sepcify to bower_concat where the files are located.
+        // specify to bower_concat where the files are located.
         mainFiles: {
           bootstrap: [
             'dist/css/bootstrap.min.css',
             'dist/js/bootstrap.min.js',
           ],
           'stacktrace-js': [
-//            'stacktrace.js',
             'dist/stacktrace-with-promises-and-json-polyfills.min.js',
             'dist/stacktrace-with-promises-and-json-polyfills.min.js.map',
           ],
@@ -206,14 +214,35 @@ module.exports = function (grunt) {
         files: '<%= uglify.files %>',
       },
     },
+    // Compile .less files to .css into the tmp directory
+    less: {
+      dist: {
+        files: {
+          '<%= config.tmp %>/resources/css/main.css': '<%= config.app %>/resources/css/main.less',
+        },
+      },
+    },
+    // Concatenate all css (either generated and placed in the tmp directory
+    // or the manually written one from app/resources) into one css file placed
+    // in the dist folder
+    concat: {
+      css: {
+        src: [
+          '<%= config.app %>/resources/css/*.css',
+          '<%= config.tmp %>/resources/css/*.css',
+        ],
+        dest: '<%= config.tmp %>/resources/css/styles.css',
+        sourceMap: true,
+      },
+    },
     // Minify and concatenate CSS files.
-    // Generate minified images to config.dist.
+    // Generate minified css files to config.dist.
     cssmin: {
       files: [{ // project css files
         expand: true,
-        cwd: '<%= config.app %>/resources/css',
-        src: ['*.css', '!*.min.css'],
-        dest: '<%= config.app %>/resources/css',
+        cwd: '<%= config.tmp %>/resources/css',
+        src: ['styles.css'],
+        dest: '<%= config.dist %>/resources/css',
         ext: '.min.css',
       }, { // vendor css files
         expand: true,
@@ -249,7 +278,30 @@ module.exports = function (grunt) {
           expand: true,
           cwd: '<%= config.app %>',
           src: ['templates/**/*.html'],
+          dest: '<%= config.dist %>',
+        }, {
+          expand: true,
+          flatten: true,
+          cwd: '<%= config.app %>',
+          src: ['js/directives/**/*.html'],
           dest: '<%= config.dist %>/templates',
+        }],
+      },
+      resources: {
+        files: [{
+          expand: true,
+          cwd: '<%= config.app %>',
+          src: ['resources/locales/*.json', 'favicon.ico'],
+          dest: '<%= config.dist %>',
+        }],
+      },
+      // Manually copy bootstrap fonts referenced in vendor.css
+      font: {
+        files: [{
+          expand: true,
+          flatten: true,
+          src: ['./bower_components/bootstrap/dist/fonts/**/*.ttf'],
+          dest: '<%= config.dist %>/resources/css/fonts/',
         }],
       },
       fakeuglify: {
@@ -312,6 +364,13 @@ module.exports = function (grunt) {
           livereload: true,
         },
       },
+      html: {
+        files: ['<%= config.app %>/**/*.html'],
+        tasks: ['dist'],
+        options: {
+          livereload: true,
+        },
+      },
       jstest: {
         files: ['test/**/*.js'],
         tasks: ['test:watch'],
@@ -321,7 +380,7 @@ module.exports = function (grunt) {
       },
       styles: {
         files: ['<%= config.app %>/resources/css/**/*.css'],
-        tasks: ['cssmin:dist'],
+        tasks: ['less:dist', 'concat:css', 'cssmin:dist'],
       },
       livereload: {
         options: {
@@ -374,9 +433,13 @@ module.exports = function (grunt) {
       'wiredep',
       'imagemin:dist',
       'copy:html', // No minification of HTML for testing
+      'copy:resources',
       'ngAnnotate',
       'requirejs:dist',
       'bower_concat',
+      'copy:font',
+      'less:dist',
+      'concat:css',
       'cssmin:dist',
       'copy:fakeuglify', // To speed up the process. Uglify. is. slow.
     ]);
@@ -404,10 +467,14 @@ module.exports = function (grunt) {
       'wiredep',
       'imagemin:package',
       'htmlmin',
+      'copy:resources',
       'ngAnnotate',
       'requirejs:package',
       'bower_concat',
+      'copy:font',
       'uglify:package',
+      'less:dist',
+      'concat:css',
       'cssmin:package',
       'copy:package', // Copy package to the backend
     ]);

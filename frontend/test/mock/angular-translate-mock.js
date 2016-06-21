@@ -19,6 +19,9 @@ define('mocks/translate-mock', function () {
     };
     $translate.preferredLanguage = function () { return 'en'; };
     $translate.use = function () { };
+    $translate.statefulFilter = function () { };
+    $translate.instant = function (translationId, interpolateParams,
+                                   interpolation, forceLanguage) { };
     $provide.value('$translate', $translate);
   };
 });

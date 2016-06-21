@@ -45,9 +45,17 @@ module.exports = function (config) {
       // Babel polyfill is used to enable ES6 features on PhantomJS
       'node_modules/babel-polyfill/dist/polyfill.js',
 
+      // Some helper files
+      'test/mock/promise-mock.js',
+      'test/mock/angular-translate-mock.js',
+      'test/mock/websocket-service-mock.js',
+
       'app/js/**/*.js',
       'test/unit/**/*.spec.js',
       'test/unit/test-main.js',
+
+      // Templates
+      'dist/**/*.html',
     ],
 
     // list of files to exclude
@@ -57,12 +65,17 @@ module.exports = function (config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
+      'dist/**/*.html': ['ng-html2js'],
+      // source files, that you wanna generate coverage for
+      // do not include tests or libraries
+      // (these files will be instrumented by Istanbul)
+      'app/**/*.js': ['coverage'],
     },
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['progress'],
+    reporters: ['progress', 'coverage'],
 
     // web server port
     port: 9876,
@@ -82,6 +95,14 @@ module.exports = function (config) {
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
     browsers: ['PhantomJS'],
 
+    // Which plugins to enable
+    plugins: [
+      'karma-phantomjs-launcher',
+      'karma-jasmine',
+      'karma-ng-html2js-preprocessor',
+      'karma-coverage',
+    ],
+
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
     singleRun: true,
@@ -89,5 +110,16 @@ module.exports = function (config) {
     // Concurrency level
     // how many browser should be started simultanous
     concurrency: Infinity,
+
+    // ng-html2js configuration
+    ngHtml2JsPreprocessor: {
+      stripPrefix: 'dist/',
+    },
+
+    // optionally, configure the reporter
+    coverageReporter: {
+      type: 'html',
+      dir: 'coverage/',
+    },
   });
 };
