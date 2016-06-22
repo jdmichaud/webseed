@@ -1,9 +1,9 @@
 /* eslint indent: [0, 0] */
 
 require(['app.modules', 'services/rest.service', 'services/log.service',
-         'services/websocket.service'],
+         'services/configuration.service', 'services/websocket.service'],
         function (application, restServiceFactory, logServiceFactory,
-                  webSocketServiceFactory) {
+                  configurationServiceFactory, webSocketServiceFactory) {
   'use strict';
 
   // Create a jQuery pseudo-service
@@ -12,6 +12,7 @@ require(['app.modules', 'services/rest.service', 'services/log.service',
   }]);
   application.service('restService', restServiceFactory);
   application.service('logService', logServiceFactory);
+  application.service('confService', configurationServiceFactory);
   application.service('webSocketService', webSocketServiceFactory);
 
   // Bootstrap the angular application

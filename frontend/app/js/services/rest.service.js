@@ -13,6 +13,7 @@ define('services/rest.service', function () {
   var urls = {
     x: '/some/X/url',
     log: '/log',
+    configuration: '/uxcast/conf-provider/configuration',
   };
 
   return function ($http) {
@@ -48,6 +49,37 @@ define('services/rest.service', function () {
       $http.put(urls.log, logStruct)
       .then(function () {}, function () {
         console.error('Could not log message. Server error.');
+      });
+    };
+
+    /**
+     * Retrieve the configuration object from the server
+     * @access public
+     * @returns {Object} - A promise resolving the object retrieved
+     */
+    restService.getConfiguration = function getConfiguration() {
+      return new Promise(function (resolve, reject) {
+        $http.get(urls.configuration).then(function (data) {
+          resolve(data.data);
+        }, function (data) {
+          reject(data);
+        });
+      });
+    };
+
+    /**
+     * Set the configuration. The configuration object is a arbitrary structure
+     * defined by the configuration service.
+     * @access public
+     * @params {Object} - An arbitrary structure
+     */
+    restService.setConfiguration = function setConfiguration(configuration) {
+      return new Promise(function (resolve, reject) {
+        $http.put(urls.configuration, configuration).then(function (data) {
+          resolve(data.data);
+        }, function (data) {
+          reject(data);
+        });
       });
     };
 
