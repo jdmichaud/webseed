@@ -1,14 +1,14 @@
 /* eslint indent: [0, 0] */
 
-require(['app.modules', 'services/rest.service', 'services/log.service',
-         'services/configuration.service', 'services/websocket.service',
-         'services/model.service'],
-        function (application, restServiceFactory, logServiceFactory,
-                  confServiceFactory, webSocketServiceFactory,
-                  modelServiceFactory) {
+require(['app.modules', 'app.constants', 'app.config', 'services/rest.service',
+         'services/log.service', 'services/configuration.service',
+         'services/websocket.service', 'services/model.service'],
+        function (application, constants, configure, restServiceFactory,
+                  logServiceFactory, confServiceFactory,
+                  webSocketServiceFactory, modelServiceFactory) {
   'use strict';
 
-  // Create a jQuery pseudo-service
+  // Create third-party non angular pseudo-services
   application.factory('jQuery', ['$window', function ($window) {
     return $window.jQuery;
   }]);
@@ -21,6 +21,8 @@ require(['app.modules', 'services/rest.service', 'services/log.service',
   application.service('confService', confServiceFactory);
   application.service('webSocketService', webSocketServiceFactory);
   application.service('modelService', modelServiceFactory);
+  // Configure the application
+  application.config(['$translateProvider', '$stateProvider', '$urlRouterProvider', configure]);
   // Bootstrap the angular application
   angular.bootstrap(document, ['WebseedApp']);
 });
