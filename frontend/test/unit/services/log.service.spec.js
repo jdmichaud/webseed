@@ -23,7 +23,7 @@ require([], function () {
 
     // Retrieve the httpBackend which angular will use to simulate the http
     // API
-    beforeEach(inject(function (_$httpBackend_, _logService_) {
+    beforeEach(inject(function (_logService_) {
       logService = _logService_;
     }));
 
