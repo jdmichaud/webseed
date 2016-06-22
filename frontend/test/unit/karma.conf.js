@@ -34,6 +34,7 @@ module.exports = function (config) {
       'bower_components/stack-generator/stack-generator.js',
       'bower_components/stacktrace-gps/dist/stacktrace-gps.js',
       'bower_components/stacktrace-js/dist/stacktrace-with-promises-and-json-polyfills.min.js',
+      'bower_components/lodash/lodash.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
 
