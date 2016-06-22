@@ -18,13 +18,12 @@ define('services/log.service', function () {
     logService.error = function (message) {
       return new Promise(function (resolve, reject) {
         StackTrace.get().then(function (stackframes) {
-          console.log(stackframes);
           logService.log(message,
                          1,
                          Date.now(),
-                         stackframes[2].fileName,
-                         stackframes[2].lineNumber,
-                         stackframes[2].columnNumber);
+                         stackframes[stackframes.length - 1].fileName,
+                         stackframes[stackframes.length - 1].lineNumber,
+                         stackframes[stackframes.length - 1].columnNumber);
           resolve();
         }).catch(function (data) {
           reject(data);
@@ -42,9 +41,9 @@ define('services/log.service', function () {
         logService.log(message,
                        2,
                        Date.now(),
-                       stackframes[2].fileName,
-                       stackframes[2].lineNumber,
-                       stackframes[2].columnNumber);
+                       stackframes[stackframes.length - 1].fileName,
+                       stackframes[stackframes.length - 1].lineNumber,
+                       stackframes[stackframes.length - 1].columnNumber);
       });
     };
 
@@ -58,9 +57,9 @@ define('services/log.service', function () {
         logService.log(message,
                        3,
                        Date.now(),
-                       stackframes[2].fileName,
-                       stackframes[2].lineNumber,
-                       stackframes[2].columnNumber);
+                       stackframes[stackframes.length - 1].fileName,
+                       stackframes[stackframes.length - 1].lineNumber,
+                       stackframes[stackframes.length - 1].columnNumber);
       });
     };
 
@@ -74,16 +73,16 @@ define('services/log.service', function () {
         logService.log(message,
                        4,
                        Date.now(),
-                       stackframes[2].fileName,
-                       stackframes[2].lineNumber,
-                       stackframes[2].columnNumber);
+                       stackframes[stackframes.length - 1].fileName,
+                       stackframes[stackframes.length - 1].lineNumber,
+                       stackframes[stackframes.length - 1].columnNumber);
       });
     };
 
     /** @access private */
     logService.log = function (message, level, timestamp, file, line, column) {
       // TODO: Log also on the console for now. See if we want to keep that.
-      console.log(message, file, line);
+      console.log(message + ' (' + file + ':' + line + ')');
       restService.log({
         message: message,
         level: level,

@@ -36,7 +36,7 @@ require([], function () {
         return {
           then: function (callback) {
             callback([
-              {}, {}, stackFrame,
+              {}, {}, {}, stackFrame,
             ]);
           },
         };
