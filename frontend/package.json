@@ -7,7 +7,7 @@
   "devDependencies": {
     "babel-polyfill": "~6.7.4",
     "bower": "~1.6.5",
-    "eslint": "~3.0.1",
+    "eslint": "3.0.1",
     "eslint-config-airbnb": "~9.0.1",
     "eslint-plugin-import": "~1.10.2",
     "eslint-plugin-jsx-a11y": "~1.5.5",
@@ -53,6 +53,7 @@
   "scripts": {
     "postinstall": "./node_modules/protractor/bin/webdriver-manager update",
     "test": "grunt test",
+    "eslint": "eslint",
     "protractor": "protractor"
   }
 }

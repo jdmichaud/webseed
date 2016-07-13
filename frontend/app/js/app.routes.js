@@ -10,7 +10,8 @@ define('app.routes', ['app.modules'], function (application) {
     // Configure the routes here
     $stateProvider
     .state('main', {
-      templateUrl: 'templates/main.html',
+      url: '/',
+      templateUrl: 'templates/scenario.html',
     });
     $urlRouterProvider.otherwise('/');
   };
