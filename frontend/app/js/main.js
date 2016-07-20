@@ -24,5 +24,7 @@ require(['app.modules', 'app.constants', 'app.config', 'services/rest.service',
   // Configure the application
   application.config(['$translateProvider', '$stateProvider', '$urlRouterProvider', configure]);
   // Bootstrap the angular application
-  angular.bootstrap(document, ['WebseedApp']);
+  angular.bootstrap(document, ['WebseedApp'] {
+    strictDi: true, //  To force DI annotations including in debug mode.
+  });
 });
